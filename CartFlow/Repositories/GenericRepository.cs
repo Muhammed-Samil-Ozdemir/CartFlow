@@ -31,7 +31,7 @@ public abstract class GenericRepository<T>(AppDbContext dbContext) where T : cla
 
     public IQueryable<T> GetAll() => _dbSet.AsQueryable();
 
-    public Task<List<T>> GetAllAsync(CancellationToken cancellationToken) => _dbSet.ToListAsync(cancellationToken);
+    public Task<List<T>> GetAllListAsync(CancellationToken cancellationToken) => _dbSet.ToListAsync(cancellationToken);
 
     public IQueryable<T> GetWhere(Expression<Func<T, bool>> expression) => _dbSet.Where(expression);
 
