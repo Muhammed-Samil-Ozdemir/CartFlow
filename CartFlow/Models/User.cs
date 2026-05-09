@@ -2,7 +2,7 @@ using CartFlow.Abstractions;
 
 namespace CartFlow.Models;
 
-public class User : BaseEntity
+public sealed class User : BaseEntity
 {
     public string Name { get; set; } = default!;
     public string? Email { get; set; }

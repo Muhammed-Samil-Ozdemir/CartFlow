@@ -2,7 +2,7 @@ using CartFlow.Abstractions;
 
 namespace CartFlow.Models;
 
-public class Cart : BaseEntity
+public sealed class Cart : BaseEntity
 {
     public Guid UserId { get; set; }
     public User User { get; set; } = default!;
