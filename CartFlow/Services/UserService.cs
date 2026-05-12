@@ -13,7 +13,8 @@ public sealed class UserService(UserRepository repository, UnitOfWork unitOfWork
         var user = new User()
         {
             Name = request.Name,
-            Email = request.Email
+            Email = request.Email,
+            Password = request.Password,
         };
         
         await repository.AddAsync(user, cancellationToken);

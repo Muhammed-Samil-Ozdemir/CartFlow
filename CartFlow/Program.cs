@@ -1,6 +1,7 @@
 using CartFlow.Context;
 using CartFlow.Handlers;
 using CartFlow.Options;
+using CartFlow.Providers;
 using CartFlow.Repositories;
 using CartFlow.Services;
 using CartFlow.UnitOfWorks;
@@ -10,11 +11,12 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 
+builder.Services.AddScoped<JwtProvider>();
+
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<CartItemService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<CouponService>();
@@ -31,7 +33,9 @@ builder.Services.AddScoped<UserRepository>();
 
 builder.Services.AddScoped<UnitOfWork>();
 
-builder.Services.AddAuthentication();
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+builder.Services.ConfigureOptions<JwtSetupOptions>();
+builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
 
 builder.Services.AddExceptionHandler<ExceptionHandler>().AddProblemDetails();

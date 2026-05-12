@@ -1,12 +1,14 @@
 using CartFlow.Abstractions;
 using CartFlow.Dtos.Discounts;
 using CartFlow.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CartFlow.Controllers;
 
 [Route("discount")]
 [ApiController]
+[Authorize]
 public class DiscountController(DiscountService service) : CustomBaseController
 {
     [HttpPost]
