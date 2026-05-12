@@ -21,8 +21,7 @@ public sealed class DiscountConfiguration : IEntityTypeConfiguration<Discount>
             .IsRequired();
 
         builder.Property(x => x.TargetType)
-            .IsRequired()
-            .HasMaxLength(50);
+            .IsRequired();
 
         builder.Property(x => x.IsPercentage)
             .IsRequired();
