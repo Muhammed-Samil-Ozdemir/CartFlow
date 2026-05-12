@@ -26,7 +26,7 @@ public sealed class UserService(UserRepository repository, UnitOfWork unitOfWork
     {
         var user = await repository.GetByIdAsync(id, cancellationToken);
         if (user is null)
-            return Result<UserDto>.NotFound("Discount not found!");
+            return Result<UserDto>.NotFound("User not found!");
         
         var result = new UserDto(
             user.Id,

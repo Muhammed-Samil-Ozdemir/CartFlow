@@ -8,7 +8,7 @@ namespace CartFlow.Services;
 
 public sealed class CouponService(CouponRepository couponRepository, UnitOfWork unitOfWork)
 {
-    public async Task<Result<Guid>> CreateCouponAsync(CreateCouponRequest request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> CreateAsync(CreateCouponRequest request, CancellationToken cancellationToken)
     {
         var isExist = await couponRepository.AnyAsync(c => c.Code == request.Code, cancellationToken);
         if (isExist)

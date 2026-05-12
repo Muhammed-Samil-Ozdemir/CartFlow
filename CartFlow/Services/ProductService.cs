@@ -42,7 +42,7 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
         return Result<Guid>.Success(product.Id);
     }
     
-    public async Task<Result<List<ProductDto>>> GetAllListAsync(CancellationToken cancellationToken)
+    public async Task<Result<List<ProductDto>>> GetAllAsync(CancellationToken cancellationToken)
     {
         var products = await repository.GetAllAsync(cancellationToken);
     

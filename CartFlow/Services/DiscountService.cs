@@ -24,7 +24,7 @@ public sealed class DiscountService(DiscountRepository repository, UnitOfWork un
         return Result<Guid>.Created(discount.Id);
     }
     
-    public async Task<Result<List<DiscountDto>>> GetAllListAsync(CancellationToken cancellationToken)
+    public async Task<Result<List<DiscountDto>>> GetAllAsync(CancellationToken cancellationToken)
     {
         var discounts = await repository.GetAllAsync(cancellationToken);
     
