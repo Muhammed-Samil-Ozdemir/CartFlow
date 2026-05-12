@@ -1,6 +1,6 @@
-namespace CartFlow.Dtos;
+namespace CartFlow.Dtos.Products;
 
-public sealed record ProductDto(
+public sealed record CreateProductRequest(
     string Name,
     string? Description,
     decimal Price,
