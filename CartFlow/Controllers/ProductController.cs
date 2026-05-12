@@ -1,12 +1,14 @@
 using CartFlow.Abstractions;
 using CartFlow.Dtos.Products;
 using CartFlow.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CartFlow.Controllers;
 
 [Route("product")]
 [ApiController]
+[Authorize]
 public class ProductController(ProductService service) : CustomBaseController
 {
     [HttpPost]

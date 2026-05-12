@@ -1,12 +1,14 @@
 using CartFlow.Abstractions;
 using CartFlow.Dtos.Carts;
 using CartFlow.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CartFlow.Controllers;
 
 [Route("cart")]
 [ApiController]
+[Authorize]
 public class CartController(CartService service) : CustomBaseController
 {
     [HttpPost]
