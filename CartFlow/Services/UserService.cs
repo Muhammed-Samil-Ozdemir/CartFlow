@@ -8,21 +8,6 @@ namespace CartFlow.Services;
 
 public sealed class UserService(UserRepository repository, UnitOfWork unitOfWork)
 {
-    public async Task<Result<Guid>> CreateAsync(RegisterRequest request, CancellationToken cancellationToken)
-    {
-        var user = new User()
-        {
-            Name = request.Name,
-            Email = request.Email,
-            Password = request.Password,
-        };
-        
-        await repository.AddAsync(user, cancellationToken);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
-        
-        return Result<Guid>.Created(user.Id);
-    }
-
     public async Task<Result<UserDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var user = await repository.GetByIdAsync(id, cancellationToken);

@@ -8,11 +8,11 @@ namespace CartFlow.Controllers;
 
 [Route("auth")]
 [ApiController]
-public class AuthController(AuthService authService, UserService userService) : CustomBaseController
+public class AuthController(AuthService authService) : CustomBaseController
 {
-    [HttpPost]
+    [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request, CancellationToken cancellationToken) =>
-        CreateActionResult(await userService.CreateAsync(request, cancellationToken));
+        CreateActionResult(await authService.CreateAsync(request, cancellationToken));
     
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request, CancellationToken cancellationToken) =>
