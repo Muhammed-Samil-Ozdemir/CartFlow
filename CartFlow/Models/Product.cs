@@ -12,5 +12,8 @@ public sealed class Product : BaseEntity
     public Guid? DiscountId { get; set; }
     public Discount? Discount { get; set; }
     
+    public Guid OwnerId { get; set; }
+    public User? Owner { get; set; }
+    
     public List<CartItem>? CartItems { get; set; }
 }

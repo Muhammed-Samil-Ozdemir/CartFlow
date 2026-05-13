@@ -2,7 +2,7 @@ using CartFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CartFlow.Context.Configurations;
+namespace CartFlow.Configurations;
 
 public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
@@ -26,6 +26,11 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(x => x.Carts)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(x => x.Products)
+            .WithOne(x => x.Owner)
+            .HasForeignKey(x => x.OwnerId)
             .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasIndex(x => x.Email)

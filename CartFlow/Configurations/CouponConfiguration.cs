@@ -2,7 +2,7 @@ using CartFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CartFlow.Context.Configurations;
+namespace CartFlow.Configurations;
 
 public sealed class CouponConfiguration : IEntityTypeConfiguration<Coupon>
 {

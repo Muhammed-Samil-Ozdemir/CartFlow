@@ -9,6 +9,7 @@ public sealed class User : BaseEntity
     public string Password { get; set; } = default!;
     
     public List<Cart>? Carts { get; set; }
+    public List<Product>? Products { get; set; }
     
     public bool VerifyPassword(string password) => password == Password;
     
