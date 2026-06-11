@@ -10,6 +10,17 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 
@@ -22,6 +33,7 @@ builder.Services.AddScoped<CouponService>();
 builder.Services.AddScoped<DiscountService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<CategoryService>();
 
 builder.Services.AddScoped<CartItemRepository>();
 builder.Services.AddScoped<CartRepository>();
@@ -29,6 +41,7 @@ builder.Services.AddScoped<CouponRepository>();
 builder.Services.AddScoped<DiscountRepository>();
 builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<CategoryRepository>();
 
 builder.Services.AddScoped<UnitOfWork>();
 
@@ -69,6 +82,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 var app = builder.Build();
 
+app.UseCors("AllowAngular");
 app.MapControllers();
 
 app.UseExceptionHandler();

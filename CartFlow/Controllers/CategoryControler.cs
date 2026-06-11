@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CartFlow.Controllers;
 
-[Route("product")]
+[Route("category")]
 [ApiController]
 [Authorize]
 public class CategoryController(CategoryService service) : CustomBaseController
