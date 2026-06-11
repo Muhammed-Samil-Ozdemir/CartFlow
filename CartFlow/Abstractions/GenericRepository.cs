@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using CartFlow.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace CartFlow.Repositories;
+namespace CartFlow.Abstractions;
 
 public abstract class GenericRepository<T>(AppDbContext dbContext) where T : class
 {

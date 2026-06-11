@@ -6,4 +6,5 @@ public sealed record ProductDto(
     string? Description,
     decimal Price,
     int Stock,
-    Guid? DiscountId);
+    Guid? DiscountId,
+    Guid CategoryId);

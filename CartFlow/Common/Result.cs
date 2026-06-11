@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace CartFlow.Common;
 
 public class Result
@@ -47,7 +49,7 @@ public sealed class Result<T> : Result
     
     public string? UrlAsCreated { get; private set; }
 
-    [System.Text.Json.Serialization.JsonIgnore]
+    [JsonIgnore]
     public T Value => IsSuccess
         ? _value!
         : throw new InvalidOperationException("Failure result has no value.");

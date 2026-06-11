@@ -32,11 +32,19 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         
         builder.Property(x => x.OwnerId)
             .IsRequired();
+        
+        builder.Property(x => x.CategoryId)
+            .IsRequired();
 
         builder.HasOne(x => x.Discount)
             .WithMany(x => x.Products)
             .HasForeignKey(x => x.DiscountId)
             .OnDelete(DeleteBehavior.SetNull);
+        
+        builder.HasOne(x => x.Category)
+            .WithMany(x => x.Products)
+            .HasForeignKey(x => x.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.CartItems)
             .WithOne(x => x.Product)

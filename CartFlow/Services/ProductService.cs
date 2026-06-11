@@ -13,7 +13,11 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
         var product = new Product()
         {
             Name = request.Name,
-            Price = request.Price
+            Description = request.Description,
+            Price = request.Price,
+            Stock = request.Stock,
+            OwnerId = request.OwnerId,
+            CategoryId = request.CategoryId
         };
         
         await repository.AddAsync(product, cancellationToken);
@@ -35,6 +39,7 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
         product.Description = request.Description;
         product.Price = request.Price;
         product.Stock = request.Stock;
+        product.CategoryId = request.CategoryId;
         
         repository.Update(product);
         await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -47,7 +52,14 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
         var products = await repository.GetAllAsync(cancellationToken);
     
         var result = products
-            .Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock, p.DiscountId))
+            .Select(p => new ProductDto(
+                p.Id,
+                p.Name,
+                p.Description,
+                p.Price,
+                p.Stock,
+                p.DiscountId, 
+                p.CategoryId))
             .ToList();
     
         return Result<List<ProductDto>>.Success(result);
@@ -65,7 +77,8 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
             product.Description,
             product.Price,
             product.Stock,
-            product.DiscountId);
+            product.DiscountId,
+            product.CategoryId);
         
         return Result<ProductDto>.Success(result);
     }

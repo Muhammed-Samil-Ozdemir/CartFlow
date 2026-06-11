@@ -15,6 +15,10 @@ public sealed class AuthService(
 {
     public async Task<Result<Guid>> CreateAsync(RegisterRequest request, CancellationToken cancellationToken)
     {
+        var isExist = await userRepository.AnyAsync(u => u.Email == request.Email, cancellationToken);
+        if (isExist)
+            return Result<Guid>.Conflict("Email already exists!");
+            
         var user = new User()
         {
             Name = request.Name,

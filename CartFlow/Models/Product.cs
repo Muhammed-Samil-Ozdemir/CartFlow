@@ -13,7 +13,10 @@ public sealed class Product : BaseEntity
     public Discount? Discount { get; set; }
     
     public Guid OwnerId { get; set; }
-    public User? Owner { get; set; }
+    public User Owner { get; set; } = default!;
+    
+    public Guid CategoryId { get; set; }
+    public Category Category { get; set; } = default!;
     
     public List<CartItem>? CartItems { get; set; }
 }
