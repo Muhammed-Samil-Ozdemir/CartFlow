@@ -1,3 +1,5 @@
+using CartFlow.Dtos.Categories;
+
 namespace CartFlow.Dtos.Products;
 
 public sealed record ProductDto(
@@ -7,4 +9,4 @@ public sealed record ProductDto(
     decimal Price,
     int Stock,
     Guid? DiscountId,
-    Guid CategoryId);
+    CategoryDto Category);

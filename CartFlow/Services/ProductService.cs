@@ -1,4 +1,5 @@
 using CartFlow.Common;
+using CartFlow.Dtos.Categories;
 using CartFlow.Dtos.Products;
 using CartFlow.Models;
 using CartFlow.Repositories;
@@ -59,7 +60,7 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
                 p.Price,
                 p.Stock,
                 p.DiscountId, 
-                p.CategoryId))
+                new CategoryDto(p.Category.Id, p.Category.Name)))
             .ToList();
     
         return Result<List<ProductDto>>.Success(result);
@@ -78,7 +79,7 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
             product.Price,
             product.Stock,
             product.DiscountId,
-            product.CategoryId);
+            new CategoryDto(product.CategoryId, product.Name));
         
         return Result<ProductDto>.Success(result);
     }
