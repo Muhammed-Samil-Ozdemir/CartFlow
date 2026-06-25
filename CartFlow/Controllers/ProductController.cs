@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CartFlow.Controllers;
 
-[Route("product")]
+[Route("products")]
 [ApiController]
 [Authorize]
 public class ProductController(ProductService service) : CustomBaseController
@@ -18,10 +18,6 @@ public class ProductController(ProductService service) : CustomBaseController
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, UpdateProductRequest request, CancellationToken cancellationToken) =>
         CreateActionResult(await service.UpdateAsync(id, request, cancellationToken));
-    
-    [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken) =>
-        CreateActionResult(await service.GetAllAsync(cancellationToken));
     
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken) =>

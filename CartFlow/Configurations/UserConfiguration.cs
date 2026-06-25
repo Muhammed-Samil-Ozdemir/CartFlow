@@ -28,11 +28,6 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        builder.HasMany(x => x.Products)
-            .WithOne(x => x.Owner)
-            .HasForeignKey(x => x.OwnerId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
         builder.HasIndex(x => x.Email)
             .IsUnique();
     }

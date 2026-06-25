@@ -30,9 +30,6 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.DiscountId)
             .IsRequired(false);
         
-        builder.Property(x => x.OwnerId)
-            .IsRequired();
-        
         builder.Property(x => x.CategoryId)
             .IsRequired();
 

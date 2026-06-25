@@ -1,5 +1,6 @@
 using CartFlow.Common;
 using CartFlow.Dtos.Categories;
+using CartFlow.Dtos.Discounts;
 using CartFlow.Models;
 using CartFlow.Repositories;
 using CartFlow.UnitOfWorks;
@@ -69,15 +70,7 @@ public sealed class CategoryService(
         return Result<CategoryDto>.Success(result);
     }
 
-    public async Task<Result<List<CategoryDto>>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        var categories = await repository.GetAllAsync(cancellationToken);
-        
-        var result = categories
-            .Select(c => new CategoryDto(c.Id, c.Name))
-            .ToList();
-        
-        return Result<List<CategoryDto>>.Success(result);
-    }
-
+    public IQueryable<CategoryODataDto> GetAll() =>
+        repository.GetAllQueryable()
+            .Select(c => new CategoryODataDto(c.Id, c.Name));
 }

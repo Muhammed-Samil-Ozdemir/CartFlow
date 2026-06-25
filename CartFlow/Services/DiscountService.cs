@@ -24,17 +24,6 @@ public sealed class DiscountService(DiscountRepository repository, UnitOfWork un
         return Result<Guid>.Created(discount.Id);
     }
     
-    public async Task<Result<List<DiscountDto>>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        var discounts = await repository.GetAllAsync(cancellationToken);
-    
-        var result = discounts
-            .Select(d => new DiscountDto(d.Id, d.Name, d.Amount, d.TargetType, d.IsPercentage))
-            .ToList();
-    
-        return Result<List<DiscountDto>>.Success(result);
-    }
-    
     public async Task<Result<DiscountDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var discount = await repository.GetByIdAsync(id, cancellationToken);
@@ -62,4 +51,10 @@ public sealed class DiscountService(DiscountRepository repository, UnitOfWork un
         
         return Result.Success();
     }
+    
+    public IQueryable<DiscountODataDto> GetAll() =>
+        repository.GetAllQueryable()
+            .Select(d => new DiscountODataDto(
+                d.Id, d.Name, d.Amount,
+                d.TargetType, d.IsPercentage));
 }

@@ -5,5 +5,4 @@ public sealed record CreateProductRequest(
     string? Description,
     decimal Price,
     int Stock,
-    Guid OwnerId,
     Guid CategoryId);

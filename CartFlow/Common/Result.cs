@@ -5,6 +5,8 @@ namespace CartFlow.Common;
 public class Result
 {
     public bool IsSuccess { get; }
+    
+    [JsonIgnore]
     public bool IsFailure => !IsSuccess;
     public IReadOnlyList<string> ErrorMessages { get; }
     public ResultStatus Status { get; }
@@ -47,6 +49,7 @@ public sealed class Result<T> : Result
 
     public T? Data => _value;
     
+    [JsonIgnore]
     public string? UrlAsCreated { get; private set; }
 
     [JsonIgnore]

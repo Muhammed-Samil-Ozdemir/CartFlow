@@ -1,5 +1,6 @@
 using CartFlow.Common;
 using CartFlow.Dtos.Categories;
+using CartFlow.Dtos.Discounts;
 using CartFlow.Dtos.Products;
 using CartFlow.Models;
 using CartFlow.Repositories;
@@ -17,7 +18,6 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
             Description = request.Description,
             Price = request.Price,
             Stock = request.Stock,
-            OwnerId = request.OwnerId,
             CategoryId = request.CategoryId
         };
         
@@ -48,24 +48,6 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
         return Result<Guid>.Success(product.Id);
     }
     
-    public async Task<Result<List<ProductDto>>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        var products = await repository.GetAllAsync(cancellationToken);
-    
-        var result = products
-            .Select(p => new ProductDto(
-                p.Id,
-                p.Name,
-                p.Description,
-                p.Price,
-                p.Stock,
-                p.DiscountId, 
-                new CategoryDto(p.Category.Id, p.Category.Name)))
-            .ToList();
-    
-        return Result<List<ProductDto>>.Success(result);
-    }
-    
     public async Task<Result<ProductDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var product = await repository.GetByIdAsync(id, cancellationToken);
@@ -79,7 +61,7 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
             product.Price,
             product.Stock,
             product.DiscountId,
-            new CategoryDto(product.CategoryId, product.Name));
+            product.CategoryId);
         
         return Result<ProductDto>.Success(result);
     }
@@ -95,4 +77,10 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
         
         return Result.Success();
     }
+    
+    public IQueryable<ProductODataDto> GetAll() =>
+        repository.GetAllQueryable()
+            .Select(p => new ProductODataDto(
+                p.Id, p.Name, p.Description,
+                p.Price, p.Stock, p.DiscountId, p.CategoryId));
 }

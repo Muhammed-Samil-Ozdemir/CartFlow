@@ -1,10 +1,15 @@
 using CartFlow.Context;
+using CartFlow.Controllers;
+using CartFlow.Extensions;
 using CartFlow.Handlers;
 using CartFlow.Options;
 using CartFlow.Providers;
 using CartFlow.Repositories;
 using CartFlow.Services;
 using CartFlow.UnitOfWorks;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -49,7 +54,14 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.ConfigureOptions<JwtSetupOptions>();
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
+
+builder.Services.AddControllers().AddOData(opt => 
+    opt
+        .EnableQueryFeatures()
+        .AddRouteComponents("odata", ODataEdmModel.Build()));
+
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddExceptionHandler<ExceptionHandler>().AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
@@ -83,11 +95,11 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 app.UseCors("AllowAngular");
-app.MapControllers();
 
 app.UseExceptionHandler();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {

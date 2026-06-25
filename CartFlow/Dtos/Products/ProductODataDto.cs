@@ -1,8 +1,6 @@
-using CartFlow.Dtos.Categories;
-
 namespace CartFlow.Dtos.Products;
 
-public sealed record ProductDto(
+public sealed record ProductODataDto(
     Guid Id,
     string Name,
     string? Description,

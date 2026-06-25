@@ -1,6 +1,5 @@
 using CartFlow.Abstractions;
 using CartFlow.Dtos.Auth;
-using CartFlow.Dtos.Users;
 using CartFlow.Services;
 using Microsoft.AspNetCore.Mvc;
 
