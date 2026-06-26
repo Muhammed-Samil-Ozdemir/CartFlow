@@ -26,4 +26,8 @@ public class CategoryController(CategoryService service) : CustomBaseController
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteById(Guid id, CancellationToken cancellationToken) =>
         CreateActionResult(await service.DeleteByIdAsync(id, cancellationToken));
+    
+    [HttpGet("statistics")]
+    public async Task<IActionResult> GetStatistics(CancellationToken cancellationToken) =>
+        CreateActionResult(await service.GetStatisticsAsync(cancellationToken));
 }

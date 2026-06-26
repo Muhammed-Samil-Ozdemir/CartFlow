@@ -1,4 +1,5 @@
 using CartFlow.Common;
+using CartFlow.Dtos;
 using CartFlow.Dtos.Categories;
 using CartFlow.Dtos.Discounts;
 using CartFlow.Models;
@@ -73,4 +74,14 @@ public sealed class CategoryService(
     public IQueryable<CategoryODataDto> GetAll() =>
         repository.GetAllQueryable()
             .Select(c => new CategoryODataDto(c.Id, c.Name));
+    
+    public Task<Result<StatisticsDto>> GetStatisticsAsync(CancellationToken cancellationToken)
+    {
+        var totals = repository.GetAllQueryable().Count();
+        var actives = repository.GetWhere(c => c.Products!.Any()).Count();
+        var passives = repository.GetWhere(c => !c.Products!.Any()).Count();
+
+        return Task.FromResult(Result<StatisticsDto>.Success(
+            new StatisticsDto(totals, actives, passives)));
+    }
 }
