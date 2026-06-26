@@ -18,6 +18,7 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
             Description = request.Description,
             Price = request.Price,
             Stock = request.Stock,
+            IsActive = request.IsActive,
             CategoryId = request.CategoryId
         };
         
@@ -40,6 +41,7 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
         product.Description = request.Description;
         product.Price = request.Price;
         product.Stock = request.Stock;
+        product.IsActive = request.IsActive;
         product.CategoryId = request.CategoryId;
         
         repository.Update(product);
@@ -60,6 +62,7 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
             product.Description,
             product.Price,
             product.Stock,
+            product.IsActive,
             product.DiscountId,
             product.CategoryId);
         
@@ -81,6 +84,5 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
     public IQueryable<ProductODataDto> GetAll() =>
         repository.GetAllQueryable()
             .Select(p => new ProductODataDto(
-                p.Id, p.Name, p.Description,
-                p.Price, p.Stock, p.DiscountId, p.CategoryId));
+                p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.DiscountId, p.CategoryId));
 }

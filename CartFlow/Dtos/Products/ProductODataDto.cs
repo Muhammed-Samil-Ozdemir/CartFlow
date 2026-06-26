@@ -6,5 +6,6 @@ public sealed record ProductODataDto(
     string? Description,
     decimal Price,
     int Stock,
+    bool IsActive,
     Guid? DiscountId,
     Guid CategoryId);

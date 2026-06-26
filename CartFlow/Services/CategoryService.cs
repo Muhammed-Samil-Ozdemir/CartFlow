@@ -36,7 +36,9 @@ public sealed class CategoryService(
     public async Task<Result<Guid>> UpdateAsync(Guid id, UpdateCategoryRequest request,
         CancellationToken cancellationToken)
     {
-        var isExist = await categoryRepository.AnyAsync(c => c.Name == request.Name, cancellationToken);
+        var isExist = await categoryRepository.AnyAsync(
+            c => c.Name == request.Name && c.Id != id, 
+            cancellationToken);
         if (isExist)
             return Result<Guid>.Conflict("Category already exists!");
         

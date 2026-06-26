@@ -5,4 +5,5 @@ public sealed record UpdateProductRequest(
     string? Description,
     decimal Price,
     int Stock,
+    bool IsActive,
     Guid CategoryId);
