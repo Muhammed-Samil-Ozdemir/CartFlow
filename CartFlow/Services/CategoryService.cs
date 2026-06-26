@@ -20,7 +20,10 @@ public sealed class CategoryService(
         
         var category = new Category()
         {
-            Name = request.Name
+            Name = request.Name,
+            IsActive = request.IsActive,
+            ColorIndex = request.ColorIndex,
+            IconIndex = request.IconIndex
         };
         
         await repository.AddAsync(category, cancellationToken);
@@ -41,6 +44,9 @@ public sealed class CategoryService(
             return Result<Guid>.NotFound("Category not found!");
         
         category.Name = request.Name;
+        category.IsActive = request.IsActive;
+        category.ColorIndex = request.ColorIndex;
+        category.IconIndex = request.IconIndex;
         
         repository.Update(category);
         await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -73,7 +79,7 @@ public sealed class CategoryService(
 
     public IQueryable<CategoryODataDto> GetAll() =>
         repository.GetAllQueryable()
-            .Select(c => new CategoryODataDto(c.Id, c.Name));
+            .Select(c => new CategoryODataDto(c.Id, c.Name, c.IsActive, c.ColorIndex, c.IconIndex));
     
     public Task<Result<StatisticsDto>> GetStatisticsAsync(CancellationToken cancellationToken)
     {
