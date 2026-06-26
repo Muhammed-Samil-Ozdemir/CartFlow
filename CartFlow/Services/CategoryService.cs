@@ -9,12 +9,13 @@ using CartFlow.UnitOfWorks;
 namespace CartFlow.Services;
 
 public sealed class CategoryService(
-    CategoryRepository repository,
+    CategoryRepository categoryRepository,
+    ProductRepository productRepository,
     UnitOfWork unitOfWork)
 {
     public async Task<Result<Guid>> CreateAsync(CreateCategoryRequest request, CancellationToken cancellationToken)
     {
-        var isExist = await repository.AnyAsync(c => c.Name == request.Name, cancellationToken);
+        var isExist = await categoryRepository.AnyAsync(c => c.Name == request.Name, cancellationToken);
         if (isExist)
             return Result<Guid>.Conflict("Category already exists!");
         
@@ -26,7 +27,7 @@ public sealed class CategoryService(
             IconIndex = request.IconIndex
         };
         
-        await repository.AddAsync(category, cancellationToken);
+        await categoryRepository.AddAsync(category, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
         return Result<Guid>.Created(category.Id);
@@ -35,11 +36,11 @@ public sealed class CategoryService(
     public async Task<Result<Guid>> UpdateAsync(Guid id, UpdateCategoryRequest request,
         CancellationToken cancellationToken)
     {
-        var isExist = await repository.AnyAsync(c => c.Name == request.Name, cancellationToken);
+        var isExist = await categoryRepository.AnyAsync(c => c.Name == request.Name, cancellationToken);
         if (isExist)
             return Result<Guid>.Conflict("Category already exists!");
         
-        var category = await repository.GetByIdAsync(id, cancellationToken);
+        var category = await categoryRepository.GetByIdAsync(id, cancellationToken);
         if (category is null)
             return Result<Guid>.NotFound("Category not found!");
         
@@ -48,7 +49,7 @@ public sealed class CategoryService(
         category.ColorIndex = request.ColorIndex;
         category.IconIndex = request.IconIndex;
         
-        repository.Update(category);
+        categoryRepository.Update(category);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
         return Result<Guid>.Success(category.Id);
@@ -56,11 +57,15 @@ public sealed class CategoryService(
     
     public async Task<Result> DeleteByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var category = await repository.GetByIdAsync(id, cancellationToken);
+        var category = await categoryRepository.GetByIdAsync(id, cancellationToken);
         if (category is null)
             return Result.NotFound("Category not found!");
         
-        repository.Remove(category);
+        var hasProducts = await productRepository.AnyAsync(p => p.CategoryId == id, cancellationToken);
+        if (hasProducts)
+            return Result.Conflict("Category has products. Remove or reassign them first.");
+        
+        categoryRepository.Remove(category);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         
         return Result.Success();
@@ -68,24 +73,29 @@ public sealed class CategoryService(
 
     public async Task<Result<CategoryDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var category = await repository.GetByIdAsync(id, cancellationToken);
+        var category = await categoryRepository.GetByIdAsync(id, cancellationToken);
         if (category is null)
             return Result<CategoryDto>.NotFound("Product not found!");
         
-        var result = new CategoryDto(category.Id, category.Name);
+        var result = new CategoryDto(
+            category.Id,
+            category.Name,
+            category.IsActive,
+            category.IconIndex,
+            category.ColorIndex);
         
         return Result<CategoryDto>.Success(result);
     }
 
     public IQueryable<CategoryODataDto> GetAll() =>
-        repository.GetAllQueryable()
+        categoryRepository.GetAllQueryable()
             .Select(c => new CategoryODataDto(c.Id, c.Name, c.IsActive, c.ColorIndex, c.IconIndex));
     
     public Task<Result<StatisticsDto>> GetStatisticsAsync(CancellationToken cancellationToken)
     {
-        var totals = repository.GetAllQueryable().Count();
-        var actives = repository.GetWhere(c => c.Products!.Any()).Count();
-        var passives = repository.GetWhere(c => !c.Products!.Any()).Count();
+        var totals = categoryRepository.GetAllQueryable().Count();
+        var actives = categoryRepository.GetWhere(c => c.IsActive).Count();
+        var passives = categoryRepository.GetWhere(c => !c.IsActive).Count();
 
         return Task.FromResult(Result<StatisticsDto>.Success(
             new StatisticsDto(totals, actives, passives)));

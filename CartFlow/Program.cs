@@ -1,3 +1,4 @@
+using System.Text.Json;
 using CartFlow.Context;
 using CartFlow.Controllers;
 using CartFlow.Extensions;
@@ -55,10 +56,16 @@ builder.Services.ConfigureOptions<JwtSetupOptions>();
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers().AddOData(opt => 
-    opt
-        .EnableQueryFeatures()
-        .AddRouteComponents("odata", ODataEdmModel.Build()));
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    })
+    .AddOData(options =>
+    {
+        options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100);
+        options.AddRouteComponents("odata", ODataEdmModel.Build());
+    });
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddFluentValidationAutoValidation();
