@@ -1,6 +1,7 @@
 using CartFlow.Dtos.Categories;
 using CartFlow.Dtos.Discounts;
 using CartFlow.Dtos.Products;
+using CartFlow.Dtos.Users;
 using CartFlow.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,8 @@ namespace CartFlow.Controllers;
 public class AppODataController(
     CategoryService categoryService,
     ProductService productService,
-    DiscountService discountService) : ODataController
+    DiscountService discountService,
+    UserService userService) : ODataController
 {
     [HttpGet("categories")]
     public IQueryable<CategoryODataDto> GetAllCategories() => categoryService.GetAll();
@@ -26,5 +28,7 @@ public class AppODataController(
 
     [HttpGet("discounts")]
     public IQueryable<DiscountODataDto> GetAllDiscounts() => discountService.GetAll();
-    
+
+    [HttpGet("users")]
+    public IQueryable<UserODataDto> GetAllUsers() => userService.GetAll();
 }

@@ -1,6 +1,5 @@
 using CartFlow.Common;
 using CartFlow.Dtos.Users;
-using CartFlow.Models;
 using CartFlow.Repositories;
 using CartFlow.UnitOfWorks;
 
@@ -16,7 +15,7 @@ public sealed class UserService(UserRepository repository, UnitOfWork unitOfWork
         
         var result = new UserDto(
             user.Id,
-            user.Name,
+            user.Username,
             user.Email);
         
         return Result<UserDto>.Success(result);
@@ -33,4 +32,9 @@ public sealed class UserService(UserRepository repository, UnitOfWork unitOfWork
         
         return Result.Success();
     }
+    
+    public IQueryable<UserODataDto> GetAll() =>
+        repository.GetAllQueryable()
+            .Select(p => new UserODataDto(
+                p.Id, p.Username, p.Email));
 }

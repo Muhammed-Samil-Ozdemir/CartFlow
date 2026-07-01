@@ -1,6 +1,5 @@
 using CartFlow.Common;
 using CartFlow.Dtos.Auth;
-using CartFlow.Dtos.Users;
 using CartFlow.Models;
 using CartFlow.Providers;
 using CartFlow.Repositories;
@@ -21,7 +20,7 @@ public sealed class AuthService(
             
         var user = new User()
         {
-            Name = request.Name,
+            Username = request.Username,
             Email = request.Email,
             Password = request.Password,
         };

@@ -1,4 +1,5 @@
 using CartFlow.Common;
+using CartFlow.Dtos;
 using CartFlow.Dtos.Categories;
 using CartFlow.Dtos.Discounts;
 using CartFlow.Dtos.Products;
@@ -62,6 +63,7 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
             product.Description,
             product.Price,
             product.Stock,
+            product.Sold,
             product.IsActive,
             product.DiscountId,
             product.CategoryId);
@@ -83,6 +85,27 @@ public sealed class ProductService(ProductRepository repository, UnitOfWork unit
     
     public IQueryable<ProductODataDto> GetAll() =>
         repository.GetAllQueryable()
-            .Select(p => new ProductODataDto(
-                p.Id, p.Name, p.Description, p.Price, p.Stock, p.IsActive, p.DiscountId, p.CategoryId));
+            .Select(p => new ProductODataDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+                Sold = p.Sold,
+                IsActive = p.IsActive,
+                DiscountId = p.DiscountId,
+                CategoryId = p.CategoryId
+            });
+    
+    public Task<Result<ProductsStatisticsDto>> GetStatisticsAsync(CancellationToken cancellationToken)
+    {
+        var totals = repository.GetAllQueryable().Count();
+        var actives = repository.GetWhere(c => c.IsActive).Count();
+        var passives = repository.GetWhere(c => !c.IsActive).Count();
+        var outOfStock = repository.GetWhere(c => c.Stock <= 0).Count();
+
+        return Task.FromResult(Result<ProductsStatisticsDto>.Success(
+            new ProductsStatisticsDto(totals, actives, passives, outOfStock)));
+    }
 }

@@ -1,6 +1,7 @@
 using CartFlow.Dtos.Categories;
 using CartFlow.Dtos.Discounts;
 using CartFlow.Dtos.Products;
+using CartFlow.Dtos.Users;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 
@@ -15,6 +16,7 @@ public static class ODataEdmModel
         builder.EntitySet<CategoryODataDto>("categories");
         builder.EntitySet<ProductODataDto>("products");
         builder.EntitySet<DiscountODataDto>("discounts");
+        builder.EntitySet<UserODataDto>("users");
         return builder.GetEdmModel();
     }
 }

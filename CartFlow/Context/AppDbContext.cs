@@ -1,4 +1,6 @@
 using CartFlow.Abstractions;
+using CartFlow.Context.Seeds;
+using CartFlow.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CartFlow.Context;
@@ -22,6 +24,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Product>().HasData(ProductSeed.Data);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }

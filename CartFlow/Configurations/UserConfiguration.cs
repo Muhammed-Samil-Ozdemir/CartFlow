@@ -12,7 +12,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Name)
+        builder.Property(x => x.Username)
             .IsRequired()
             .HasMaxLength(100);
 

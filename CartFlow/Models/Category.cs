@@ -9,5 +9,5 @@ public sealed class Category : BaseEntity
     public int ColorIndex { get; set; }
     public int IconIndex { get; set; }
     
-    public List<Product>? Products { get; set; }
+    public ICollection<Product>? Products { get; set; }
 }

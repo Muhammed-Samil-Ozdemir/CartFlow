@@ -1,3 +1,3 @@
 namespace CartFlow.Dtos.Auth;
 
-public sealed record RegisterRequest(string Name, string Email, string Password);
+public sealed record RegisterRequest(string Username, string Email, string Password);

@@ -5,4 +5,6 @@ public sealed record CategoryODataDto(
     string Name,
     bool IsActive,
     int ColorIndex,
-    int IconIndex);
+    int IconIndex,
+    decimal AveragePrice,
+    int ProductCount);
